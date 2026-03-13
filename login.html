@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TaskFlow Pro</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .auth-header h2 {
+            color: #1e293b;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            color: #64748b;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.95rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            transition: all 0.3s;
+        }
+
+        .modern-input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .modern-input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .modern-input:focus + .input-icon {
+            color: #6366f1;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 30px -5px rgba(99, 102, 241, 0.5);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .auth-footer a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            min-height: 20px;
+        }
+
+        .success-message {
+            color: #10b981;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s;
+        }
+
+        .demo-credentials {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #475569;
+            text-align: center;
+        }
+
+        .demo-credentials i {
+            color: #6366f1;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="logo">
+                    <i class="fas fa-cube"></i> TaskFlow Pro
+                </div>
+                <h2>Welcome Back!</h2>
+                <p>Login to continue to your dashboard</p>
+            </div>
+
+            <!-- Demo Credentials -->
+            <div class="demo-credentials">
+                <i class="fas fa-info-circle"></i>
+                <strong>Demo:</strong> Email: demo@example.com | Password: demo123
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" id="loginEmail" class="modern-input" placeholder="Enter your email" value="demo@example.com">
+                    </div>
+                    <div class="error-message" id="loginEmailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="loginPassword" class="modern-input" placeholder="Enter your password" value="demo123">
+                    </div>
+                    <div class="error-message" id="loginPasswordError"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Don't have an account? 
+                <a href="register.html">Register here</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('loginEmail');
+        const passwordInput = document.getElementById('loginPassword');
+        const emailError = document.getElementById('loginEmailError');
+        const passwordError = document.getElementById('loginPasswordError');
+
+        // Email validation regex
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // Check if user is already logged in
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            window.location.href = 'index.html';
+        }
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let isValid = true;
+
+            // Email validation
+            if (emailInput.value.trim() === '') {
+                emailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Email is required';
+                emailInput.style.borderColor = '#ef4444';
+                isValid = false;
+            } else if (!emailRegex.test(emailInput.value.trim())) {
+                emailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter a valid email';
+                emailInput.style.borderColor = '#ef4444';
+                isValid = false;
+            } else {
+                emailError.innerHTML = '';
+                emailInput.style.borderColor = '#e2e8f0';
+            }
+
+            // Password validation
+            if (passwordInput.value.trim() === '') {
+                passwordError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Password is required';
+                passwordInput.style.borderColor = '#ef4444';
+                isValid = false;
+            } else {
+                passwordError.innerHTML = '';
+                passwordInput.style.borderColor = '#e2e8f0';
+            }
+
+            if (isValid) {
+                // Get registered users from localStorage
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                
+                // Check if user exists (demo user also works)
+                const user = users.find(u => 
+                    u.email === emailInput.value.trim() && 
+                    u.password === passwordInput.value.trim()
+                );
+
+                // Demo credentials check
+                const isDemo = (emailInput.value.trim() === 'demo@example.com' && 
+                               passwordInput.value.trim() === 'demo123');
+
+                if (user || isDemo) {
+                    // Set login status
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('currentUser', emailInput.value.trim());
+                    
+                    // Show success message
+                    alert('Login successful! Redirecting to dashboard...');
+                    
+                    // Redirect to main page
+                    window.location.href = 'index.html';
+                } else {
+                    alert('Invalid email or password! Please try again or register.');
+                }
+            }
+        });
+
+        // Real-time validation
+        emailInput.addEventListener('input', function() {
+            if (this.value.trim() !== '') {
+                emailError.innerHTML = '';
+                this.style.borderColor = '#e2e8f0';
+            }
+        });
+
+        passwordInput.addEventListener('input', function() {
+            if (this.value.trim() !== '') {
+                passwordError.innerHTML = '';
+                this.style.borderColor = '#e2e8f0';
+            }
+        });
+    </script>
+</body>
+</html>

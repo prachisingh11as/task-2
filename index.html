@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - TaskFlow Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .navbar {
+            background: white;
+            border-radius: 15px;
+            padding: 15px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 8px;
+        }
+        
+        .nav-link:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .user-badge {
+            background: #10b981;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        button {
+            padding: 12px 25px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+        
+        .todo-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .todo-list {
+            margin-top: 20px;
+        }
+        
+        .todo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        
+        .todo-item:hover {
+            transform: translateX(5px);
+            border-color: #667eea;
+        }
+        
+        .todo-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .todo-actions button {
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        
+        .complete-btn {
+            background: #10b981;
+        }
+        
+        .delete-btn {
+            background: #ef4444;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #94a3b8;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .error {
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .success {
+            color: #10b981;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-left: 4px solid #10b981;
+        }
+        
+        .toast.error {
+            border-left: 4px solid #ef4444;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .todo-input-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-cube"></i> TaskFlow Pro
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="#" class="nav-link">Home</a>
+            <a href="#" class="nav-link">Tasks</a>
+            <a href="#" class="nav-link">Contact</a>
+            <button onclick="logout()" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Contact Form -->
+        <div class="card">
+            <h2><i class="fas fa-paper-plane"></i> Contact Form</h2>
+            
+            <div class="form-group">
+                <input type="text" id="name" placeholder="Your Full Name">
+            </div>
+            
+            <div class="form-group">
+                <input type="email" id="email" placeholder="Your Email Address">
+            </div>
+            
+            <div class="form-group">
+                <textarea id="message" placeholder="Your Message" rows="4"></textarea>
+            </div>
+            
+            <button onclick="submitForm()">
+                <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+            <div id="formMessage" class="success"></div>
+        </div>
+
+        <!-- To-Do List -->
+        <div class="card">
+            <h2><i class="fas fa-list-check"></i> Task Manager</h2>
+            
+            <div class="todo-input-group">
+                <input type="text" id="todoInput" placeholder="Enter a new task...">
+                <button onclick="addTask()">
+                    <i class="fas fa-plus"></i> Add Task
+                </button>
+            </div>
+            
+            <div id="emptyState" class="empty-state">
+                <i class="fas fa-clipboard-list"></i>
+                <p>No tasks yet. Add your first task above!</p>
+            </div>
+            
+            <div class="todo-list" id="todoList"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas" id="toastIcon"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <script>
+        // ===== TOAST FUNCTION =====
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toast.className = `toast ${type}`;
+            toastIcon.className = `fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}`;
+            toastMessage.textContent = message;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ===== CHECK LOGIN STATUS =====
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        // ===== SHOW CURRENT USER =====
+        const currentUser = localStorage.getItem('currentUser');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (currentUser && navLinks) {
+            const userSpan = document.createElement('span');
+            userSpan.className = 'user-badge';
+            userSpan.innerHTML = `<i class="fas fa-user"></i> ${currentUser}`;
+            navLinks.insertBefore(userSpan, navLinks.firstChild);
+        }
+
+        // ===== LOGOUT FUNCTION =====
+        function logout() {
+            localStorage.setItem('isLoggedIn', 'false');
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+
+        // ===== CONTACT FORM =====
+        function submitForm() {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!name) {
+                showToast('Please enter your name', 'error');
+                return;
+            }
+            
+            if (!email) {
+                showToast('Please enter your email', 'error');
+                return;
+            }
+            
+            if (!emailRegex.test(email)) {
+                showToast('Please enter a valid email', 'error');
+                return;
+            }
+            
+            if (!message) {
+                showToast('Please enter your message', 'error');
+                return;
+            }
+            
+            showToast('Message sent successfully!', 'success');
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('message').value = '';
+        }
+
+        // ===== TO-DO LIST =====
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        const todoList = document.getElementById('todoList');
+        const emptyState = document.getElementById('emptyState');
+
+        function displayTasks() {
+            todoList.innerHTML = '';
+            
+            if (tasks.length === 0) {
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+                
+                tasks.forEach((task, index) => {
+                    const taskItem = document.createElement('div');
+                    taskItem.className = 'todo-item';
+                    taskItem.innerHTML = `
+                        <span>${task}</span>
+                        <div class="todo-actions">
+                            <button class="complete-btn" onclick="completeTask(${index})">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="delete-btn" onclick="deleteTask(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    todoList.appendChild(taskItem);
+                });
+            }
+        }
+
+        function addTask() {
+            const input = document.getElementById('todoInput');
+            const taskText = input.value.trim();
+            
+            if (!taskText) {
+                showToast('Please enter a task!', 'error');
+                return;
+            }
+            
+            tasks.push(taskText);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            displayTasks();
+            input.value = '';
+            showToast('Task added successfully!', 'success');
+        }
+
+        function completeTask(index) {
+            showToast(`Task completed: ${tasks[index]}`, 'success');
+            deleteTask(index);
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            displayTasks();
+            showToast('Task deleted!', 'success');
+        }
+
+        // Enter key to add task
+        document.getElementById('todoInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+
+        // Load tasks on page load
+        displayTasks();
+    </script>
+</body>
+</html>
